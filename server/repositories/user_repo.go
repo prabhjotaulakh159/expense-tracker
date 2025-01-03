@@ -9,6 +9,7 @@ import (
 
 type IUserRepo interface {
 	CheckIfUserExistsByUsername() (bool, error)
+	AddNewUser(user *models.User) error
 }
 
 type UserRepo struct {
@@ -38,6 +39,14 @@ func (u *UserRepo) CheckIfUserExistsByUsername(username string) (bool, error) {
 	return exists, nil
 }
 
+func (u *UserRepo) AddNewUser(user *models.User) error {
+	res := u.GORM.Create(user)
+	if res.Error != nil {
+		return res.Error
+	}
+	return nil
+}
+
 func (m *MockUserRepo) CheckIfUserExistsByUsername(username string) (bool, error) {
 	if m.THROWS_ERROR {
 		return false, errors.New("Error checking if username is unique")
@@ -46,4 +55,11 @@ func (m *MockUserRepo) CheckIfUserExistsByUsername(username string) (bool, error
 		return true, nil
 	}
 	return false, nil
+}
+
+func (m *MockUserRepo) AddNewUser(user *models.User) error {
+	if m.THROWS_ERROR {
+		return errors.New("Error creating user")
+	}
+	return nil
 }
