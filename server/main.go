@@ -16,9 +16,6 @@ import (
 
 // https://gin-gonic.com/docs/examples/graceful-restart-or-stop/
 func main() {
-	_router := router.GetRouterInstance()
-	_server := server.GetServerInstance("localhost", 8080, _router)
-
 	_db, err := db.GetGormInstance()
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
@@ -30,6 +27,9 @@ func main() {
 		log.Fatalf("Error getting SQL object: %v", err)
 	}
 	defer sqlDb.Close()
+
+	_router := router.GetRouterInstance(_db)
+	_server := server.GetServerInstance("localhost", 8080, _router)
 
 	go func() {
 		if err := _server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
