@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/prabhjotaulakh159/expense-tracker/db"
 	"github.com/prabhjotaulakh159/expense-tracker/router"
 	"github.com/prabhjotaulakh159/expense-tracker/server"
 )
@@ -17,6 +18,18 @@ import (
 func main() {
 	_router := router.GetRouterInstance()
 	_server := server.GetServerInstance("localhost", 8080, _router)
+
+	_db, err := db.GetGormInstance()
+	if err != nil {
+		log.Fatalf("Error connecting to database: %v", err)
+	}
+
+	// need sql object to close connection
+	sqlDb, err := _db.DB()
+	if err != nil {
+		log.Fatalf("Error getting SQL object: %v", err)
+	}
+	defer sqlDb.Close()
 
 	go func() {
 		if err := _server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -28,6 +41,7 @@ func main() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	log.Println("Shutdown Server ...")
+	log.Println("Database closing is deferred...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
