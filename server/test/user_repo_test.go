@@ -3,6 +3,7 @@ package test
 import (
 	"testing"
 
+	"github.com/prabhjotaulakh159/expense-tracker/models"
 	"github.com/prabhjotaulakh159/expense-tracker/repositories"
 )
 
@@ -42,5 +43,23 @@ func Test_CheckIfUserExistsByUsername_ReturnsFalse(test *testing.T) {
 	}
 	if exists {
 		test.Error("Expected false")
+	}
+}
+
+func Test_AddNewUser_ThrowsError(test *testing.T) {
+	repo := repositories.MockUserRepo{THROWS_ERROR: true}
+	user := &models.User{USERNAME: "test", PASSWORD: "john"}
+	err := repo.AddNewUser(user)
+	if err == nil {
+		test.Error("Expected function to return an error")
+	}
+}
+
+func Test_AddNewUser_Works(test *testing.T) {
+	repo := repositories.MockUserRepo{THROWS_ERROR: false}
+	user := &models.User{USERNAME: "test", PASSWORD: "john"}
+	err := repo.AddNewUser(user)
+	if err != nil {
+		test.Error("Function returned an error")
 	}
 }
