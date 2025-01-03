@@ -63,3 +63,19 @@ func Test_AddNewUser_Works(test *testing.T) {
 		test.Error("Function returned an error")
 	}
 }
+
+func Test_DeleteUser_ThrowsError(test *testing.T) {
+	repo := repositories.MockUserRepo{THROWS_ERROR: true}
+	err := repo.DeleteUser(1)
+	if err == nil {
+		test.Error("Expected Function to return an error")
+	}
+}
+
+func Test_DeleteUser_Works(test *testing.T) {
+	repo := repositories.MockUserRepo{THROWS_ERROR: false}
+	err := repo.DeleteUser(1)
+	if err != nil {
+		test.Error("functon returned an error")
+	}
+}

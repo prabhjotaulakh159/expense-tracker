@@ -10,6 +10,7 @@ import (
 type IUserRepo interface {
 	CheckIfUserExistsByUsername() (bool, error)
 	AddNewUser(user *models.User) error
+	DeleteUser(userId uint) error
 }
 
 type UserRepo struct {
@@ -47,6 +48,14 @@ func (u *UserRepo) AddNewUser(user *models.User) error {
 	return nil
 }
 
+func (u *UserRepo) DeleteUser(userId uint) error {
+	res := u.GORM.Delete(&models.User{}, userId)
+	if res.Error != nil {
+		return res.Error
+	}
+	return nil
+}
+
 func (m *MockUserRepo) CheckIfUserExistsByUsername(username string) (bool, error) {
 	if m.THROWS_ERROR {
 		return false, errors.New("Error checking if username is unique")
@@ -60,6 +69,13 @@ func (m *MockUserRepo) CheckIfUserExistsByUsername(username string) (bool, error
 func (m *MockUserRepo) AddNewUser(user *models.User) error {
 	if m.THROWS_ERROR {
 		return errors.New("Error creating user")
+	}
+	return nil
+}
+
+func (m *MockUserRepo) DeleteUser(userId uint) error {
+	if m.THROWS_ERROR {
+		return errors.New("Error deleting user")
 	}
 	return nil
 }
