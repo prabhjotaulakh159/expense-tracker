@@ -2,11 +2,12 @@ package controllers
 
 import (
 	"net/http"
+	"github.com/prabhjotaulakh159/expense-tracker/services"
 )
 
 type UserController struct {}
 
-func NewUserController() *UserController {
+func NewUserController(userService *services.UserService) *UserController {
 	return &UserController {}
 }
 

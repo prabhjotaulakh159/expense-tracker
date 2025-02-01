@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"github.com/prabhjotaulakh159/expense-tracker/db"
 	"github.com/prabhjotaulakh159/expense-tracker/controllers"
+	"github.com/prabhjotaulakh159/expense-tracker/services"
 )
 
 func main() {
@@ -28,7 +29,8 @@ func main() {
 		log.Println("database connection closed")
 	}()
 
-	userController := controllers.NewUserController()
+	userService := services.NewUserService()
+	userController := controllers.NewUserController(userService)
 
 	mux := http.NewServeMux()	
 	mux.HandleFunc("POST /api/user/register", userController.Register)
