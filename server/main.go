@@ -11,6 +11,8 @@ import (
 	"github.com/prabhjotaulakh159/expense-tracker/db"
 	"github.com/prabhjotaulakh159/expense-tracker/controllers"
 	"github.com/prabhjotaulakh159/expense-tracker/services"
+	"github.com/prabhjotaulakh159/expense-tracker/repositories"
+
 )
 
 func main() {
@@ -29,7 +31,8 @@ func main() {
 		log.Println("database connection closed")
 	}()
 
-	userService := services.NewUserService()
+	userRepository := repositories.NewUserRepository(db)
+	userService := services.NewUserService(userRepository)
 	userController := controllers.NewUserController(userService)
 
 	mux := http.NewServeMux()	
