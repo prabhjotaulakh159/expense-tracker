@@ -12,6 +12,7 @@ import (
 	"github.com/prabhjotaulakh159/expense-tracker/controllers"
 	"github.com/prabhjotaulakh159/expense-tracker/services"
 	"github.com/prabhjotaulakh159/expense-tracker/repositories"
+	"github.com/prabhjotaulakh159/expense-tracker/encryption"
 
 )
 
@@ -32,7 +33,8 @@ func main() {
 	}()
 
 	userRepository := repositories.NewUserRepository(db)
-	userService := services.NewUserService(userRepository)
+	passwordEncoder := encryption.NewPasswordEncoder()
+	userService := services.NewUserService(userRepository, passwordEncoder)
 	userController := controllers.NewUserController(userService)
 
 	mux := http.NewServeMux()	
