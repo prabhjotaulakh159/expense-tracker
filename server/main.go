@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"syscall"
 	"github.com/prabhjotaulakh159/expense-tracker/db"
+	"github.com/prabhjotaulakh159/expense-tracker/controllers"
 )
 
 func main() {
@@ -27,7 +28,10 @@ func main() {
 		log.Println("database connection closed")
 	}()
 
+	userController := controllers.NewUserController()
+
 	mux := http.NewServeMux()	
+	mux.HandleFunc("POST /api/user/register", userController.Register)
 	server := newServer(mux, "localhost", 3000)
 	go startServer(server)
 	log.Println(fmt.Sprintf("server is listening on %s", server.Addr))
