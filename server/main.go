@@ -11,7 +11,6 @@ import (
 	"github.com/prabhjotaulakh159/expense-tracker/db"
 )
 
-
 func main() {
 	db, err := db.NewGormDB()
 	if err != nil {
