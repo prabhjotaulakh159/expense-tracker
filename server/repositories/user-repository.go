@@ -23,11 +23,10 @@ func (userRepository *UserRepository) CreateUser(user *models.User) error {
 }
 
 func (userRepository *UserRepository) IsUsernameUnique(username string) (bool, error) {
-	count := int64(0)
+	var count int64
 	err := userRepository.Connection.Model(&models.User{}).Where("username = ?", username).Count(&count).Error
 	if err != nil {
 		return false, err
 	}
-	exists := count > 0
-	return exists, nil
+	return count == 0, nil
 }
