@@ -28,7 +28,7 @@ func (userService *UserService) Register(username string, password string) error
 		return exceptions.NewValidationError("username cannot be empty")
 	}
 	if len(password) < minPasswordLength {
-		return exceptions.NewValidationError(fmt.Sprintf("password cannot smaller than %d characters", minPasswordLength))
+		return exceptions.NewValidationError(fmt.Sprintf("password cannot be smaller than %d characters", minPasswordLength))
 	}
 	if username == password {
 		return exceptions.NewValidationError("username and password cannot be the same")

@@ -10,5 +10,5 @@ type MockPasswordEncoder struct {
 
 func (passwordEncoder *MockPasswordEncoder) HashPassword(password string) (string, error) {
 	args := passwordEncoder.Called(password)
-	return args.String(0), args.Error(0)
+	return args.String(0), args.Error(1)
 }
